@@ -47,11 +47,17 @@ while True:
                             e_properties = appliance.get('smart_meter', {}).get('echonetlite_properties', {})
                             # @see https://developer.nature.global/docs/how-to-calculate-energy-data-from-smart-meter-values/
                             for e_property in e_properties:
-                                if e_property.get('name') == 'measured_instantaneous':
+                                e_property_name = e_property.get('name')
+                                if e_property_name == 'measured_instantaneous':
                                     measured_instantaneous = e_property.get('val', 'Unknown')
-                                    ep = point.field("measured_instantaneous", int(measured_instantaneous)).time(datestr)
-                                    write_api.write(bucket=bucket, record=ep)
-                                    print("SmartMeter information was commited.")
+                                elif e_property_name == 'normal_direction_cumulative_electric_energy':
+                                    normal_direction_cumulative_electric_energy = e_property.get('val', 'Unknown')
+                                elif e_property_name == 'cumulative_electric_energy_unit':
+                                    cumulative_electric_energy_unit = e_property.get('val', 'Unknown')
+                            ep = point.field("measured_instantaneous", int(measured_instantaneous)).field("normal_direction_cumulative_electric_energy", float(normal_direction_cumulative_electric_energy)).field("cumulative_electric_energy_unit", int(cumulative_electric_energy_unit)).time(datestr)
+                            write_api.write(bucket=bucket, record=ep)
+                            print("SmartMeter information was commited.")
+
                         else:
                             print('Device not found.')
                 else:

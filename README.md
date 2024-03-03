@@ -12,6 +12,8 @@ And the data fetched from there will be stored in a database named influxDB.
 
 - [InfluxDB](https://www.influxdata.com/get-influxdb/)
 - [Nature Remo Cloud API](https://developer.nature.global/en/)
+  - How to calculate the energy consumption
+    - [Nature Remo Cloud API - Energy API](https://developer.nature.global/docs/how-to-calculate-energy-data-from-smart-meter-values/)
 - [Grafana](https://grafana.com/grafana/)
 
 ## Environment
@@ -30,7 +32,9 @@ And the data fetched from there will be stored in a database named influxDB.
 
 ### 1. Set up the environment
 
-In advance, you need to pick up the token from the Nature Remo Cloud API, and set up the environment variables.
+In advance, you need to pick up the token from the Nature Remo Cloud API and set up the environment variables.
+
+But, `INFLUX_XXX` is not necessary to set up first, please add dummy data to environment values because these should be got from the InfluxDB.
 
 ### 2. Run the server
 
