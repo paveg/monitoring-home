@@ -1,9 +1,10 @@
-version: '3'
+version: '3.8'
 services:
   influxdb:
     image: influxdb:latest
     volumes:
-      - influxdb_data:/var/lib/influxdb/data
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_data:/var/lib/influxdb
     environment:
       - INFLUXDB_DB=${INFLUXDB_DB:-http://influxdb:8086}
       - INFLUXDB_USER=${INFLUXDB_USER}

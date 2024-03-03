@@ -54,7 +54,13 @@ while True:
                                     normal_direction_cumulative_electric_energy = e_property.get('val', 'Unknown')
                                 elif e_property_name == 'cumulative_electric_energy_unit':
                                     cumulative_electric_energy_unit = e_property.get('val', 'Unknown')
-                            ep = point.field("measured_instantaneous", int(measured_instantaneous)).field("normal_direction_cumulative_electric_energy", float(normal_direction_cumulative_electric_energy)).field("cumulative_electric_energy_unit", int(cumulative_electric_energy_unit)).time(datestr)
+                                elif e_property_name == 'coefficient':
+                                    coefficient = e_property.get('val', 'Unknown')
+                                elif e_property_name == 'cumulative_electric_energy_effective_digits':
+                                    cumulative_electric_energy_effective_digits = e_property.get('val', 'Unknown')
+                                elif e_property_name == 'reverse_direction_cumulative_electric_energy':
+                                    reverse_direction_cumulative_electric_energy = e_property.get('val', 'Unknown')
+                            ep = point.field("measured_instantaneous", int(measured_instantaneous)).field("normal_direction_cumulative_electric_energy", float(normal_direction_cumulative_electric_energy)).field("cumulative_electric_energy_unit", int(cumulative_electric_energy_unit)).field("coefficient", int(coefficient)).field("reverse_direction_cumulative_electric_energy", float(reverse_direction_cumulative_electric_energy)).field("cumulative_electric_energy_effective_digits", int(cumulative_electric_energy_effective_digits)).time(datestr)
                             write_api.write(bucket=bucket, record=ep)
                             print("SmartMeter information was commited.")
 
