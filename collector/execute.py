@@ -63,9 +63,6 @@ while True:
                             ep = point.field("measured_instantaneous", int(measured_instantaneous)).field("normal_direction_cumulative_electric_energy", float(normal_direction_cumulative_electric_energy)).field("cumulative_electric_energy_unit", int(cumulative_electric_energy_unit)).field("coefficient", int(coefficient)).field("reverse_direction_cumulative_electric_energy", float(reverse_direction_cumulative_electric_energy)).field("cumulative_electric_energy_effective_digits", int(cumulative_electric_energy_effective_digits)).time(datestr)
                             write_api.write(bucket=bucket, record=ep)
                             print("SmartMeter information was commited.")
-
-                        else:
-                            print('[Appliance] A different device found: ', + device_name)
                 else:
                     print('Failed to retrieve data: ', response.text)
             else:
