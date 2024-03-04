@@ -65,7 +65,7 @@ while True:
                             print("SmartMeter information was commited.")
 
                         else:
-                            print('Device not found.')
+                            print('[Appliance] A different device found: ', + device_name)
                 else:
                     print('Failed to retrieve data: ', response.text)
             else:

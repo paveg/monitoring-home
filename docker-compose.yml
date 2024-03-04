@@ -6,8 +6,8 @@ services:
       - influxdb_data:/var/lib/influxdb2
       - influxdb_data:/var/lib/influxdb
     environment:
-      - INFLUXDB_DB=${INFLUXDB_DB:-http://influxdb:8086}
-      - INFLUXDB_USER=${INFLUXDB_USER}
+      - INFLUXDB_DB=${INFLUXDB_DB:-remo_db}
+      - INFLUXDB_USER=${INFLUXDB_USER:-remo_user}
       - INFLUXDB_USER_PASSWORD=${INFLUXDB_USER_PASSWORD}
     ports:
       - "8086:8086"
@@ -31,11 +31,11 @@ services:
       - influxdb
     environment:
       - INFLUXDB_URL=${INFLUXDB_URL:-http://influxdb:8086}
-      - INFLUXDB_DB=${INFLUXDB_DB}
-      - INFLUXDB_USER=${INFLUXDB_USER}
+      - INFLUXDB_DB=${INFLUXDB_DB:-remo_db}
+      - INFLUXDB_USER=${INFLUXDB_USER:-remo_user}
       - INFLUXDB_USER_PASSWORD=${INFLUXDB_USER_PASSWORD}
-      - INFLUXDB_ORG=${INFLUXDB_ORG}
-      - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
+      - INFLUXDB_ORG=${INFLUXDB_ORG:-Home}
+      - INFLUXDB_BUCKET=${INFLUXDB_BUCKET:-situations}
       - INFLUXDB_TOKEN=${INFLUXDB_TOKEN}
       - REMO_TOKEN=${REMO_TOKEN}
 volumes:
