@@ -4,7 +4,21 @@ import os
 import requests
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
+import logging
+from sys import stdout
 
+logger = logging.getLogger("Logger")
+logger.setLevel(logging.INFO)
+def customTime(*args):
+    return datetime.now(timezone(timedelta(hours=+9), 'GMT')).timetuple()
+formatter = logging.Formatter(
+    fmt='%(levelname)s : %(asctime)s : %(message)s',
+    datefmt="%Y-%m-%d %H:%M:%S %z"
+)
+formatter.converter = customTime
+consoleHandler = logging.StreamHandler(stdout)
+consoleHandler.setFormatter(formatter)
+logger.addHandler(consoleHandler)
 device_api_url = 'https://api.nature.global/1/devices'
 appliances_api_url = 'https://api.nature.global/1/appliances'
 bearer_token = os.environ.get('REMO_TOKEN')
@@ -22,7 +36,7 @@ point = Point("statuses")
 
 headers = { 'accept': 'application/json', 'Authorization': 'Bearer ' + bearer_token}
 while True:
-    datestr = datetime.now(timezone(timedelta(hours=+0), 'GMT')).strftime('%Y-%m-%dT%H:%M:%SZ')
+    datestr = datetime.now(timezone(timedelta(hours=+9), 'GMT')).strftime('%Y-%m-%dT%H:%M:%SZ')
     response = requests.get(device_api_url, headers=headers)
 
     if response.status_code == 200:
@@ -37,7 +51,7 @@ while True:
                 iluminance = newest_events.get('il', {}).get('val', 'Unknown')
                 np = point.field("temperature", float(temperature)).field("humidity", float(humidity)).field("iluminance", float(iluminance)).time(datestr)
                 write_api.write(bucket=bucket, record=np)
-                print("Environment information was commited.")
+                logger.info("Environment information was commited.")
             elif device_name == 'RemoElite':
                 response = requests.get(appliances_api_url, headers=headers)
                 if response.status_code == 200:
@@ -62,12 +76,12 @@ while True:
                                     reverse_direction_cumulative_electric_energy = e_property.get('val', 'Unknown')
                             ep = point.field("measured_instantaneous", int(measured_instantaneous)).field("normal_direction_cumulative_electric_energy", float(normal_direction_cumulative_electric_energy)).field("cumulative_electric_energy_unit", int(cumulative_electric_energy_unit)).field("coefficient", int(coefficient)).field("reverse_direction_cumulative_electric_energy", float(reverse_direction_cumulative_electric_energy)).field("cumulative_electric_energy_effective_digits", int(cumulative_electric_energy_effective_digits)).time(datestr)
                             write_api.write(bucket=bucket, record=ep)
-                            print("SmartMeter information was commited.")
+                            logger.info("SmartMeter information was commited.")
                 else:
-                    print('Failed to retrieve data: ', response.text)
+                    logger.warning('Failed to retrieve data: ', response.text)
             else:
-                print('The data fetched from unknown device.')
+                logger.warning('The data fetched from unknown device.')
     else:
-        print('Failed to retrieve data: ', response.text)
+        logger.warning('Failed to retrieve data: ', response.text)
 
     time.sleep(60)
